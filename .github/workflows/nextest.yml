@@ -71,8 +71,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: 3.11
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install setuptools wheel twine
       - name: Install Vyper
-        run: pip --version && pip install vyper==0.4.0
+        run: pip install vyper==0.4.1
 
       - name: Forge RPC cache
         uses: actions/cache@v3
