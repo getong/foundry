@@ -203,7 +203,7 @@ warning[divide-before-multiply]: multiplication should occur before division to 
 16 │         (1 / 2) * 3;
    │         ━━━━━━━━━━━
    │
-   ╰ help: https://book.getfoundry.sh/reference/forge/forge-lint#divide-before-multiply
+   ╰ help: https://getfoundry.sh/forge/linting/divide-before-multiply
 
 
 "#]]);
@@ -230,7 +230,7 @@ note[mixed-case-function]: function names should use mixedCase
 9 │     function functionMIXEDCaseInfo() public {}
   │              ━━━━━━━━━━━━━━━━━━━━━ help: consider using: `functionMixedCaseInfo`
   │
-  ╰ help: https://book.getfoundry.sh/reference/forge/forge-lint#mixed-case-function
+  ╰ help: https://getfoundry.sh/forge/linting/mixed-case-function
 
 
 "#]]);
@@ -610,7 +610,7 @@ note[mixed-case-function]: function names should use mixedCase
 9 │     function functionMIXEDCaseInfo() public {}
   │              ━━━━━━━━━━━━━━━━━━━━━ help: consider using: `functionMixedCaseInfo`
   │
-  ╰ help: https://book.getfoundry.sh/reference/forge/forge-lint#mixed-case-function
+  ╰ help: https://getfoundry.sh/forge/linting/mixed-case-function
 
 
 "#]]);
@@ -637,7 +637,7 @@ warning[divide-before-multiply]: multiplication should occur before division to 
 16 │         (1 / 2) * 3;
    │         ━━━━━━━━━━━
    │
-   ╰ help: https://book.getfoundry.sh/reference/forge/forge-lint#divide-before-multiply
+   ╰ help: https://getfoundry.sh/forge/linting/divide-before-multiply
 
 
 "#]]);
@@ -665,7 +665,7 @@ warning[incorrect-shift]: the order of args in a shift operation is incorrect
 13 │         uint256 result = 8 >> localValue;
    │                          ━━━━━━━━━━━━━━━
    │
-   ╰ help: https://book.getfoundry.sh/reference/forge/forge-lint#incorrect-shift
+   ╰ help: https://getfoundry.sh/forge/linting/incorrect-shift
 
 
 "#
@@ -694,7 +694,7 @@ warning[divide-before-multiply]: multiplication should occur before division to 
 16 │         (1 / 2) * 3;
    │         ━━━━━━━━━━━
    │
-   ╰ help: https://book.getfoundry.sh/reference/forge/forge-lint#divide-before-multiply
+   ╰ help: https://getfoundry.sh/forge/linting/divide-before-multiply
 
 
 "#]]).stdout_eq(str![[r#"
@@ -855,7 +855,7 @@ note[unused-import]: unused imports should be removed
 8 │ import { _PascalCaseInfo } from "./ContractWithLints.sol";
   │          ━━━━━━━━━━━━━━━
   │
-  ╰ help: https://book.getfoundry.sh/reference/forge/forge-lint#unused-import
+  ╰ help: https://getfoundry.sh/forge/linting/unused-import
 
 
 "#]]);
@@ -887,7 +887,7 @@ note[mixed-case-variable]: mutable variables should use mixedCase
 6 │     uint256 public CounterB_Fail_Lint;
   │                    ━━━━━━━━━━━━━━━━━━ help: consider using: `counterBFailLint`
   │
-  ╰ help: https://book.getfoundry.sh/reference/forge/forge-lint#mixed-case-variable
+  ╰ help: https://getfoundry.sh/forge/linting/mixed-case-variable
 
 
 "#]]);
@@ -992,7 +992,7 @@ forgetest!(lint_json_output_no_ansi_escape_codes, |prj, cmd| {
     ],
     "children": [
     {
-        "message": "https://book.getfoundry.sh/reference/forge/forge-lint#unwrapped-modifier-logic",
+        "message": "https://getfoundry.sh/forge/linting/unwrapped-modifier-logic",
         "code": null,
         "level": "help",
         "spans": [],
@@ -1048,7 +1048,7 @@ forgetest!(lint_json_output_no_ansi_escape_codes, |prj, cmd| {
         "rendered": null
     }
     ],
-    "rendered": "note[unwrapped-modifier-logic]: wrap modifier logic to reduce code size\n\nhelp: wrap modifier logic to reduce code size\n 9 +                 _onlyOwner();\n10 +                 _;\n11 +             }\n12 + \n13 +             function _onlyOwner() internal {\n14 +                 require(isOwner[msg.sender], \"Not owner\");\n15 +                 require(msg.sender != address(0), \"Zero address\");\n16 +             }\n   ╭▸ src/UnwrappedModifierTest.sol:8:13\n   │\n 8 │ ┏             modifier onlyOwner() {\n 9 │ ┃                 require(isOwner[msg.sender], \"Not owner\");\n10 │ ┃                 require(msg.sender != address(0), \"Zero address\");\n11 │ ┃                 _;\n12 │ ┃             }\n   │ ┗━━━━━━━━━━━━━┛\n   │\n   ╰ help: https://book.getfoundry.sh/reference/forge/forge-lint#unwrapped-modifier-logic\n   ╭╴\n 8 ±             modifier onlyOwner() {\n   ╰╴\n"
+    "rendered": "note[unwrapped-modifier-logic]: wrap modifier logic to reduce code size\n\nhelp: wrap modifier logic to reduce code size\n 9 +                 _onlyOwner();\n10 +                 _;\n11 +             }\n12 + \n13 +             function _onlyOwner() internal {\n14 +                 require(isOwner[msg.sender], \"Not owner\");\n15 +                 require(msg.sender != address(0), \"Zero address\");\n16 +             }\n   ╭▸ src/UnwrappedModifierTest.sol:8:13\n   │\n 8 │ ┏             modifier onlyOwner() {\n 9 │ ┃                 require(isOwner[msg.sender], \"Not owner\");\n10 │ ┃                 require(msg.sender != address(0), \"Zero address\");\n11 │ ┃                 _;\n12 │ ┃             }\n   │ ┗━━━━━━━━━━━━━┛\n   │\n   ╰ help: https://getfoundry.sh/forge/linting/unwrapped-modifier-logic\n   ╭╴\n 8 ±             modifier onlyOwner() {\n   ╰╴\n"
 }
 "#]],
 );
@@ -1292,7 +1292,7 @@ note[pragma-inconsistent]: 'pragma solidity ^0.8.20;' conflicts with other versi
 3 │ pragma solidity ^0.8.20;
   │ ━━━━━━━━━━━━━━━━━━━━━━━━
   │
-  ╰ help: https://book.getfoundry.sh/reference/forge/forge-lint#pragma-inconsistent
+  ╰ help: https://getfoundry.sh/forge/linting/pragma-inconsistent
 
 note[pragma-inconsistent]: 'pragma solidity 0.8.20;' conflicts with other version requirements in the project: ^0.8.20
   [FILE]:3:1
@@ -1300,7 +1300,7 @@ note[pragma-inconsistent]: 'pragma solidity 0.8.20;' conflicts with other versio
 3 │ pragma solidity 0.8.20;
   │ ━━━━━━━━━━━━━━━━━━━━━━━
   │
-  ╰ help: https://book.getfoundry.sh/reference/forge/forge-lint#pragma-inconsistent
+  ╰ help: https://getfoundry.sh/forge/linting/pragma-inconsistent
 
 
 "#]
@@ -1403,7 +1403,7 @@ note[pragma-inconsistent]: 'pragma solidity 0.8.20;' conflicts with other versio
 3 │ pragma solidity 0.8.20;
   │ ━━━━━━━━━━━━━━━━━━━━━━━
   │
-  ╰ help: https://book.getfoundry.sh/reference/forge/forge-lint#pragma-inconsistent
+  ╰ help: https://getfoundry.sh/forge/linting/pragma-inconsistent
 
 note[pragma-inconsistent]: 'pragma solidity 0.8.20;' conflicts with other version requirements in the project: ^0.8.20
   [FILE]:3:1
@@ -1411,7 +1411,7 @@ note[pragma-inconsistent]: 'pragma solidity 0.8.20;' conflicts with other versio
 3 │ pragma solidity 0.8.20;
   │ ━━━━━━━━━━━━━━━━━━━━━━━
   │
-  ╰ help: https://book.getfoundry.sh/reference/forge/forge-lint#pragma-inconsistent
+  ╰ help: https://getfoundry.sh/forge/linting/pragma-inconsistent
 
 note[pragma-inconsistent]: 'pragma solidity ^0.8.20;' conflicts with other version requirements in the project: 0.8.20
   [FILE]:3:1
@@ -1419,7 +1419,7 @@ note[pragma-inconsistent]: 'pragma solidity ^0.8.20;' conflicts with other versi
 3 │ pragma solidity ^0.8.20;
   │ ━━━━━━━━━━━━━━━━━━━━━━━━
   │
-  ╰ help: https://book.getfoundry.sh/reference/forge/forge-lint#pragma-inconsistent
+  ╰ help: https://getfoundry.sh/forge/linting/pragma-inconsistent
 
 
 "#]
@@ -1443,7 +1443,7 @@ note[pragma-inconsistent]: 'pragma solidity 0.8.20;' conflicts with other versio
 3 │ pragma solidity 0.8.20;
   │ ━━━━━━━━━━━━━━━━━━━━━━━
   │
-  ╰ help: https://book.getfoundry.sh/reference/forge/forge-lint#pragma-inconsistent
+  ╰ help: https://getfoundry.sh/forge/linting/pragma-inconsistent
 
 note[pragma-inconsistent]: 'pragma solidity ^0.8.20;' conflicts with other version requirements in the project: 0.8.20
   [FILE]:3:1
@@ -1451,7 +1451,7 @@ note[pragma-inconsistent]: 'pragma solidity ^0.8.20;' conflicts with other versi
 3 │ pragma solidity ^0.8.20;
   │ ━━━━━━━━━━━━━━━━━━━━━━━━
   │
-  ╰ help: https://book.getfoundry.sh/reference/forge/forge-lint#pragma-inconsistent
+  ╰ help: https://getfoundry.sh/forge/linting/pragma-inconsistent
 
 
 "#]
