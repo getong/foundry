@@ -286,11 +286,7 @@ impl ScriptArgs {
         }
 
         let mut tempo = self.tempo.clone();
-        if let Some(ts) = tempo.expires_at() {
-            tempo.expiring_nonce = true;
-            tempo.valid_before = Some(ts);
-            tempo.common.expires = None;
-        }
+        tempo.resolve_expires();
 
         if evm_opts.networks.is_tempo() && tempo.common.fee_token.is_none() {
             tempo.common.fee_token = Some(PATH_USD_ADDRESS);
