@@ -37,6 +37,8 @@ use tempo_contracts::precompiles::{
 };
 use yansi::Paint;
 
+use foundry_cli::utils::{maybe_print_resolved_lane, resolve_lane};
+
 use crate::{
     cmd::send::cast_send,
     tx::{CastTxBuilder, CastTxSender, SendTxOpts},
@@ -1119,7 +1121,7 @@ async fn run_policy_set_limit(
 /// Shared helper to send a keychain precompile transaction.
 async fn send_keychain_tx(
     calldata: Vec<u8>,
-    tx_opts: TransactionOpts,
+    mut tx_opts: TransactionOpts,
     send_tx: &SendTxOpts,
 ) -> Result<()> {
     let (signer, tempo_access_key) = send_tx.eth.wallet.maybe_signer().await?;
@@ -1134,6 +1136,10 @@ async fn send_keychain_tx(
     if let Some(interval) = send_tx.poll_interval {
         provider.client().set_poll_interval(Duration::from_secs(interval));
     }
+
+    // Resolve `--tempo.lane <name>` against the lanes file (default
+    // `<root>/tempo.lanes.toml`) and populate `tx_opts.tempo.nonce_key` from the lane.
+    let resolved_lane = resolve_lane(&mut tx_opts.tempo, &config.root)?;
 
     let builder = CastTxBuilder::new(&provider, tx_opts, &config)
         .await?
@@ -1202,6 +1208,7 @@ async fn send_keychain_tx(
         };
         let from = signer.address();
         let (mut tx, _) = builder.build(from).await?;
+        maybe_print_resolved_lane(resolved_lane.as_ref(), tx.nonce().unwrap_or_default())?;
         if let Some(sponsor) = &tempo_sponsor {
             sponsor.attach_and_print::<TempoNetwork>(&mut tx, from).await?;
         }

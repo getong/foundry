@@ -9,6 +9,7 @@ use foundry_common::{
 };
 use std::{
     num::NonZeroU64,
+    path::PathBuf,
     str::FromStr,
     sync::Arc,
     time::{SystemTime, UNIX_EPOCH},
@@ -71,8 +72,30 @@ pub struct TempoOpts {
     /// to be executed in parallel. If not set, the protocol nonce key (0) will be used.
     ///
     /// For more information see <https://docs.tempo.xyz/protocol/transactions/spec-tempo-transaction#parallelizable-nonces>.
-    #[arg(long = "tempo.nonce-key", value_name = "NONCE_KEY")]
+    #[arg(long = "tempo.nonce-key", value_name = "NONCE_KEY", conflicts_with = "lane")]
     pub nonce_key: Option<U256>,
+
+    /// Named nonce lane for Tempo parallelizable nonces.
+    ///
+    /// Resolves a friendly lane name (e.g. `deploy`, `payments`) to a `nonce_key` via a
+    /// shared lanes file (default: `tempo.lanes.toml` at the project root). The lanes file
+    /// is a TOML map of `name = <U256>` entries, e.g.:
+    ///
+    /// ```toml
+    /// deploy   = 1
+    /// ops      = 2
+    /// payments = 3
+    /// ```
+    ///
+    /// Mutually exclusive with `--tempo.nonce-key`.
+    #[arg(long = "tempo.lane", value_name = "NAME")]
+    pub lane: Option<String>,
+
+    /// Path to the Tempo lanes file used by `--tempo.lane`.
+    ///
+    /// Defaults to `tempo.lanes.toml` at the project root.
+    #[arg(long = "tempo.lanes-file", value_name = "PATH")]
+    pub lanes_file: Option<PathBuf>,
 
     /// Sponsor (fee payer) address for Tempo sponsored transactions.
     #[arg(long = "tempo.sponsor", value_name = "ADDRESS")]
@@ -148,6 +171,7 @@ impl TempoOpts {
     pub const fn is_tempo(&self) -> bool {
         self.common.is_tempo()
             || self.nonce_key.is_some()
+            || self.lane.is_some()
             || self.sponsor.is_some()
             || self.sponsor_signer.is_some()
             || self.sponsor_sig.is_some()
@@ -271,6 +295,24 @@ fn parse_expires_seconds(s: &str) -> Result<u64, String> {
 mod tests {
     use super::*;
     use alloy_primitives::address;
+
+    #[test]
+    fn parses_lane_arg() {
+        let opts = TempoOpts::try_parse_from(["", "--tempo.lane", "deploy"]).unwrap();
+        assert_eq!(opts.lane.as_deref(), Some("deploy"));
+        assert!(opts.nonce_key.is_none());
+    }
+
+    #[test]
+    fn lane_conflicts_with_nonce_key() {
+        let err =
+            TempoOpts::try_parse_from(["", "--tempo.lane", "deploy", "--tempo.nonce-key", "1"])
+                .unwrap_err();
+        assert!(
+            err.to_string().contains("cannot be used with"),
+            "expected clap conflict error, got: {err}",
+        );
+    }
 
     #[test]
     fn parse_expires_flag() {
